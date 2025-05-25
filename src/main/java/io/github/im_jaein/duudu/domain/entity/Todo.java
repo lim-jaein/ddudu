@@ -18,6 +18,8 @@ public class Todo extends BaseTimeEntity {
 
     private String content;
 
+    private boolean completed;
+
     public Todo(String content) {
         this.content = content;
     }

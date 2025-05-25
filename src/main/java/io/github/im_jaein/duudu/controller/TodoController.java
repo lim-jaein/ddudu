@@ -1,6 +1,5 @@
 package io.github.im_jaein.duudu.controller;
 
-import io.github.im_jaein.duudu.domain.entity.Todo;
 import io.github.im_jaein.duudu.dto.TodoRequestDto;
 import io.github.im_jaein.duudu.dto.TodoResponseDto;
 import io.github.im_jaein.duudu.service.TodoService;

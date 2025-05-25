@@ -1,11 +1,14 @@
 package io.github.im_jaein.duudu.service;
 
 import io.github.im_jaein.duudu.domain.entity.Todo;
+import io.github.im_jaein.duudu.dto.TodoRequestDto;
+import io.github.im_jaein.duudu.dto.TodoResponseDto;
 import io.github.im_jaein.duudu.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -13,12 +16,25 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
 
-    public Todo createTodo(String content) {
-        Todo todo = new Todo(content);
-        return todoRepository.save(todo);
+    public TodoResponseDto createTodo(TodoRequestDto requestDto) {
+        Todo todo = new Todo(requestDto.getContent());
+        Todo savedTodo = todoRepository.save(todo);
+
+        return new TodoResponseDto(
+                savedTodo.getId(),
+                savedTodo.getContent(),
+                savedTodo.isCompleted(),
+                savedTodo.getCreatedAt()
+        );
     }
 
-    public List<Todo> getAllTodos() {
-        return todoRepository.findAll();
+    public List<TodoResponseDto> getAllTodos() {
+        return todoRepository.findAll().stream()
+                .map(todo -> new TodoResponseDto(
+                        todo.getId(),
+                        todo.getContent(),
+                        todo.isCompleted(),
+                        todo.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 }
