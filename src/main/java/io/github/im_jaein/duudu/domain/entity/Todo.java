@@ -23,4 +23,8 @@ public class Todo extends BaseTimeEntity {
     public Todo(String content) {
         this.content = content;
     }
+
+    public void complete() {
+        this.completed = true;
+    }
 }

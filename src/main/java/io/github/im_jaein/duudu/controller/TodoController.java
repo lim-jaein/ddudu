@@ -43,4 +43,27 @@ public class TodoController {
         List<TodoResponseDto> todos = todoService.getAllTodos();
         return ResponseEntity.ok(todos);
     }
+
+    @PatchMapping("/{id}/complete")
+    @Operation(summary = "todo 완료 처리", description = "todo 완료 상태로 업데이트")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 todo"),
+            @ApiResponse(responseCode = "500", description = "서버 에러 발생")
+    })
+    public ResponseEntity<Void> completeTodo(@PathVariable Long id) {
+        todoService.completeTodo(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "todo 삭제", description = "특정 todo 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "삭제 성공"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 todo")
+    })
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+        todoService.deleteTodo(id);
+        return ResponseEntity.noContent().build();
+    }
 }

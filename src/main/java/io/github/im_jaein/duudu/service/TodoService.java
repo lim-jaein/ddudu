@@ -6,6 +6,7 @@ import io.github.im_jaein.duudu.dto.TodoResponseDto;
 import io.github.im_jaein.duudu.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,5 +37,20 @@ public class TodoService {
                         todo.isCompleted(),
                         todo.getCreatedAt()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void completeTodo(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 todo 입니다. " + id));
+        System.out.println("completeTodo:"+todo.getId());
+        todo.complete();
+    }
+
+    public void deleteTodo(Long id) {
+        if(!todoRepository.existsById(id)) {
+            throw new IllegalArgumentException("존재하지 않는 todo 입니다. " + id);
+        }
+        todoRepository.deleteById(id);
     }
 }
