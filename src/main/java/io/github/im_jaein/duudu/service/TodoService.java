@@ -1,5 +1,6 @@
 package io.github.im_jaein.duudu.service;
 
+import io.github.im_jaein.duudu.common.exception.TodoNotFoundException;
 import io.github.im_jaein.duudu.domain.entity.Todo;
 import io.github.im_jaein.duudu.dto.TodoRequestDto;
 import io.github.im_jaein.duudu.dto.TodoResponseDto;
@@ -42,14 +43,13 @@ public class TodoService {
     @Transactional
     public void completeTodo(Long id) {
         Todo todo = todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 todo 입니다. " + id));
-        System.out.println("completeTodo:"+todo.getId());
+                .orElseThrow(() -> new TodoNotFoundException(id));
         todo.complete();
     }
 
     public void deleteTodo(Long id) {
         if(!todoRepository.existsById(id)) {
-            throw new IllegalArgumentException("존재하지 않는 todo 입니다. " + id);
+            throw new TodoNotFoundException(id);
         }
         todoRepository.deleteById(id);
     }

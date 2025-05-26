@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,10 @@ public class TodoController {
     @Operation(summary = "todo 등록", description = "새로운 todo 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "등록 성공"),
+            @ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
             @ApiResponse(responseCode = "500", description = "서버 에러 발생")
     })
-    public ResponseEntity<TodoResponseDto> createTodo(@RequestBody TodoRequestDto requestDto) {
+    public ResponseEntity<TodoResponseDto> createTodo(@RequestBody @Valid TodoRequestDto requestDto) {
         TodoResponseDto todo = todoService.createTodo(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(todo);
     }
@@ -48,7 +50,7 @@ public class TodoController {
     @Operation(summary = "todo 완료 처리", description = "todo 완료 상태로 업데이트")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 todo"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 todo"),
             @ApiResponse(responseCode = "500", description = "서버 에러 발생")
     })
     public ResponseEntity<Void> completeTodo(@PathVariable Long id) {
@@ -60,7 +62,8 @@ public class TodoController {
     @Operation(summary = "todo 삭제", description = "특정 todo 삭제")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "삭제 성공"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 todo")
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 todo"),
+            @ApiResponse(responseCode = "500", description = "서버 에러 발생")
     })
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         todoService.deleteTodo(id);
