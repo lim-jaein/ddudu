@@ -26,12 +26,20 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("400", message));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIlligalArgument(IllegalArgumentException ex) {
-        // 존재하지 않는 리소스 등의 상황
+    @ExceptionHandler(TodoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTodoNotFound(TodoNotFoundException ex) {
+        // 존재하지 않는 todo
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse("404", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIlligalArgument(IllegalArgumentException ex) {
+
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorResponse("400", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -40,13 +48,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("500", "서버 오류가 발생했습니다."));
-    }
-
-    @ExceptionHandler(TodoNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTodoNotFound(TodoNotFoundException ex) {
-        // 존재하지 않는 todo
-        return ResponseEntity
-                .badRequest()
-                .body(new ErrorResponse("400", ex.getMessage()));
     }
 }
