@@ -1,5 +1,6 @@
 package io.github.im_jaein.duudu.controller;
 
+import io.github.im_jaein.duudu.dto.TodoCompleteRequestDto;
 import io.github.im_jaein.duudu.dto.TodoRequestDto;
 import io.github.im_jaein.duudu.dto.TodoResponseDto;
 import io.github.im_jaein.duudu.service.TodoService;
@@ -46,15 +47,15 @@ public class TodoController {
         return ResponseEntity.ok(todos);
     }
 
-    @PatchMapping("/{id}/complete")
-    @Operation(summary = "todo 완료 처리", description = "todo 완료 상태로 업데이트")
+    @PatchMapping("/{id}")
+    @Operation(summary = "todo 완료 관리", description = "todo 완료/미완료 상태로 업데이트")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공"),
             @ApiResponse(responseCode = "400", description = "존재하지 않는 todo"),
             @ApiResponse(responseCode = "500", description = "서버 에러 발생")
     })
-    public ResponseEntity<Void> completeTodo(@PathVariable Long id) {
-        todoService.completeTodo(id);
+    public ResponseEntity<Void> completeTodo(@PathVariable Long id, @RequestBody @Valid TodoCompleteRequestDto requestDto) {
+        todoService.updateCompletedTodo(id, requestDto.getIsCompleted());
         return ResponseEntity.ok().build();
     }
 

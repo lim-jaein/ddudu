@@ -7,9 +7,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Todo extends BaseTimeEntity {
     @Id
@@ -22,9 +24,5 @@ public class Todo extends BaseTimeEntity {
 
     public Todo(String content) {
         this.content = content;
-    }
-
-    public void complete() {
-        this.completed = true;
     }
 }

@@ -41,10 +41,11 @@ public class TodoService {
     }
 
     @Transactional
-    public void completeTodo(Long id) {
+    public void updateCompletedTodo(Long id, boolean isCompleted) {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException(id));
-        todo.complete();
+
+        todo.setCompleted(isCompleted);
     }
 
     public void deleteTodo(Long id) {
